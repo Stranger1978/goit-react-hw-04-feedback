@@ -10,13 +10,14 @@ export  function App () {
   const [counterBad, setCounterBad] = useState(0);
 
   const totalCountFeedback = () => {
-    const totalCount = counterGood + counterNeutral + counterBad;
+    let totalCount = counterGood + counterNeutral + counterBad;
     return totalCount;
   };
 
-  const incrementFeedback = e => {
-    const buttonName = e.target.textContent.toLowerCase();
-    switch (buttonName) {
+  const onIncrementFeedback = e => {
+    //const buttonName = e;
+   // console.log(buttonName);
+    switch (e) {
       case 'good':
         setCounterGood(state => state + 1);
         break;
@@ -31,17 +32,19 @@ export  function App () {
     }
   };
 
-  const countPositiveFeedbackPercentage = () => {
-    const PositiveFeedbackPercentage = Math.ceil((counterGood / totalCountFeedback) * 100);
+  const countPositiveFeedbackPercentage = totalCount => {
+    const PositiveFeedbackPercentage = Math.ceil((counterGood / totalCount) * 100);
     return PositiveFeedbackPercentage ? PositiveFeedbackPercentage : 0;
   } 
   
+    const total = totalCountFeedback();
+    const percentage = countPositiveFeedbackPercentage(total);
   return (
-          <div class="container">
+          <div className="container">
             <Section title="Please leave feedback">
                 <FeedBackOptions
-                  options={['good', 'neutral', 'bad']}
-                  onLeaveFeedback={incrementFeedback}
+          options={['good', 'neutral', 'bad']}
+                  onLeaveFeedback={onIncrementFeedback}
                 />
             </Section>
             <Section title="Statistics">
@@ -49,8 +52,8 @@ export  function App () {
                 good={counterGood}
                 neutral={counterNeutral}
                 bad={counterBad}
-                total={totalCountFeedback}
-                positivePercentage={countPositiveFeedbackPercentage}
+                total={total}
+                positivePercentage={percentage}
               /> :
                 <Notification message="There is no feedback"></Notification>
               } 
